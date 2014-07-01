@@ -7,7 +7,7 @@ module Definition =
     open IntelliFactory.WebSharper.Html5
 
     let O = T<unit>
-    let Ulong =  T<uint32>
+    let Ulong =  T<int>
     let Event = T<Event>
 
 //    let SpeechGrammarList = Type.New ()
