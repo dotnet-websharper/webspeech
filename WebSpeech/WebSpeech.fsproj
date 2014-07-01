@@ -6,7 +6,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8b5e2ec3-85b5-493e-b87a-df16e985f27a}</ProjectGuid>
     <WebSharperProject>InterfaceGenerator</WebSharperProject>
-    <Name>SpeechAPI</Name>
+    <Name>WebSpeech</Name>
     <RootNamespace>SpeechAPI</RootNamespace>
     <AssemblyName>SpeechAPI</AssemblyName>
     <NuGetPackageImportStamp>3ed2e89a</NuGetPackageImportStamp>

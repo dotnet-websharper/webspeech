@@ -7,8 +7,8 @@ let bt =
 
 let main =
     (bt.WebSharper.Extension("IntelliFactory.WebSharper.WebSpeech")
-    |> FSharpConfig.BaseDir.Custom "WebRTC")
-        .SourcesFromProject("WebRTC.fsproj")
+    |> FSharpConfig.BaseDir.Custom "WebSpeech")
+        .SourcesFromProject("WebSpeech.fsproj")
 
 (*let test =
     (bt.WebSharper.BundleWebsite("IntelliFactory.WebSharper.WebRTC.Tests")

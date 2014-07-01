@@ -1,6 +1,6 @@
 syntax: glob
-SpeechAPI/bin/*
-SpeechAPI/obj/*
+WebSpeech/bin/*
+WebSpeech/obj/*
 build/*
 packages/*
 *.suo
