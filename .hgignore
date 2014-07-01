@@ -1,0 +1,6 @@
+syntax: glob
+SpeechAPI/bin/*
+SpeechAPI/obj/*
+build/*
+packages/*
+*.suo
