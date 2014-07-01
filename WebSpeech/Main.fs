@@ -10,11 +10,20 @@ module Definition =
     let Ulong =  T<int>
     let Event = T<Event>
 
-//    let SpeechGrammarList = Type.New ()
+    let SpeechGrammarList = Type.New ()
     let SpeechGrammar = Type.New ()
     let ErrorCode = Type.New ()
     let SpeechRecognitionEvent = Type.New ()
     let SpeechRecognitionError = Type.New ()
+
+    //Not in the spec but may be useful
+    let ArrayLike =
+        Generic / fun t1 ->
+            Class "ArrayLike"
+            |+> Protocol [
+                "length" =? Ulong
+                "item" => Ulong?index ^-> t1
+            ]
 
     let SpeechRecognition =
         Class "SpeechRecognition"
@@ -24,7 +33,7 @@ module Definition =
             |> WithInline "new (window.SpeecRecognition || window.webkitSpeechRecognition)()"
         ]
         |+> Protocol [
-            "grammars" =@ Type.ArrayOf SpeechGrammar
+            "grammars" =@ SpeechGrammarList
             |> WithComment "Stores the collection of SpeechGrammar objects which represent the grammars that are active for this recognition."
             "lang" =@ T<string>
             |> WithComment "This attribute will set the language of the recognition for the request, using a valid BCP 47 language tag."
@@ -100,21 +109,16 @@ module Definition =
             |> WithComment "The confidence represents a numeric estimate between 0 and 1 of how confident the recognition system is that the recognition is correct."
         ]
 
-//    let SpeechRecognitionResult = 
-//        Class "SpeechRecognitionResult"
-//        |+> Protocol [
-//            "length" =? Ulong
-//            "item" => Ulong?index ^-> SpeechRecognitionAlternative
-//            "final" =? T<bool>
-//        ]
+    let SpeechRecognitionResult = 
+        Class "SpeechRecognitionResult"
+        |=> Inherits (ArrayLike SpeechRecognitionAlternative)
+        |+> Protocol [
+            "final" =? T<bool>
+        ]
 
-//    let SpeechRecognitionResultList =
-//        Class "SpeechRecognitionResultList"
-//        |=> Inherits (Type.ArrayOf SpeechRecognitionResult)
-//        |+> Protocol [
-//            "length" =? Ulong
-//            "item" => Ulong?index ^-> SpeechRecognitionResult
-//        ]
+    let SpeechRecognitionResultList =
+        Class "SpeechRecognitionResultList"
+        |=> Inherits (ArrayLike SpeechRecognitionResult)
 
     let SpeechRecognitionEventClass =
         Class "SpeechRecognitionEvent"
@@ -123,7 +127,7 @@ module Definition =
         |+> Protocol [
             "resultIndex" =? Ulong
             |> WithComment "The lowest index in the results array that has changed."
-            "results" =? Type.ArrayOf (Type.ArrayOf SpeechRecognitionAlternative)
+            "results" =? SpeechRecognitionResultList
             |> WithComment "The array of all current recognition results for this session. \
                             Specifically all final results that have been returned, followed by the current best hypothesis for all interim results."
             "interpretation" =? T<obj>
@@ -143,20 +147,18 @@ module Definition =
             |> WithComment "The optional weight attribute controls the weight that the speech recognition service should use with this grammar."
         ]
 
-//    let SpeechGrammarListClass =
-//        Class "SpeechGrammarList"
-//        |=> SpeechGrammarList
-//        |=> Inherits (Type.ArrayOf SpeechGrammar)
-//        |+> [ Constructor O ]
-//        |+> Protocol [
-//            "length" =? Ulong
-//            "item" => Ulong?index ^-> SpeechGrammar
-//            "addFromURI" => (T<string>?src * !? T<float>?weight) ^-> O
-//            "addFromString" => (T<string>?src * !? T<float>?wight) ^-> O
-//        ]
+    let SpeechGrammarListClass =
+        Class "SpeechGrammarList"
+        |=> SpeechGrammarList
+        |=> Inherits (ArrayLike SpeechGrammar)
+        |+> [ Constructor O ]
+        |+> Protocol [
+            "addFromURI" => (T<string>?src * !? T<float>?weight) ^-> O
+            "addFromString" => (T<string>?src * !? T<float>?wight) ^-> O
+        ]
 
     let SpeechSynthesisUtterance = Type.New ()
-//    let SpeechSynthesisVoiceList = Type.New ()
+    let SpeechSynthesisVoiceList = Type.New ()
     let SpeechSynthesisVoice = Type.New ()
 
     let SpeechSynthesis =
@@ -178,7 +180,7 @@ module Definition =
             "resume" => O ^-> O
             |> WithComment "This method puts the global SpeechSynthesis instance into the non-paused state."
 
-            "getVoices" => O ^-> Type.ArrayOf SpeechSynthesisVoice
+            "getVoices" => O ^-> SpeechSynthesisVoiceList
             |> WithComment "This method returns the available voices."
         ]
 
@@ -252,37 +254,35 @@ module Definition =
             "localService" =? T<bool>
             |> WithComment "This attribute is true for voices supplied by a local speech synthesizer, and is false for voices supplied by a remote speech synthesizer service."
             "default" =? T<bool>
-            |> WithComment "Indicates whether the language is the default voice of the given language."
+            |> WithComment "Indicates whether the voice is the default voice of the given language."
 
         ]
     
-//    let SpeechSynthesisVoiceListClass =
-//        Class "SpeechSynthesisVoiceList"
-//        |=> SpeechSynthesisVoiceList
-//        |+> [ Constructor O ]
-//        |+> Protocol [
-//            "length" =? Ulong
-//            "item" => Ulong?index ^-> SpeechSynthesisVoice
-//        ]
-    
+    let SpeechSynthesisVoiceListClass =
+        Class "SpeechSynthesisVoiceList"
+        |=> SpeechSynthesisVoiceList
+        |=> Inherits (ArrayLike SpeechSynthesisVoice)
+        |+> [ Constructor O ]
 
     let Assembly =
         Assembly [
             Namespace "IntelliFactory.WebSharper.Html5" [
+                Generic - ArrayLike
+
                 SpeechRecognition
                 SpeechRecognitionErrorClass
                 SpeechRecognitionAlternative
-//                SpeechRecognitionResult
-//                SpeechRecognitionResultList
+                SpeechRecognitionResult
+                SpeechRecognitionResultList
                 SpeechRecognitionEventClass
                 SpeechGrammarClass
-//                SpeechGrammarListClass
+                SpeechGrammarListClass
                 SpeechSynthesis
                 SpeechSynthesisGetter
                 SpeechSynthesisEvent
                 SpeechSynthesisUtteranceClass
                 SpeechSynthesisVoiceClass
-//                SpeechSynthesisVoiceListClass
+                SpeechSynthesisVoiceListClass
             ]
         ]
 
