@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SpeechAPI", "SpeechAPI\SpeechAPI.fsproj", "{8B5E2EC3-85B5-493E-B87A-DF16E985F27A}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSpeech", "WebSpeech\WebSpeech.fsproj", "{8B5E2EC3-85B5-493E-B87A-DF16E985F27A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
