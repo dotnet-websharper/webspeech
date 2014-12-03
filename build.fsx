@@ -2,7 +2,7 @@
 open IntelliFactory.Build
 
 let bt =
-    BuildTool().PackageId("WebSharper.WebSpeech", "2.5")
+    BuildTool().PackageId("WebSharper.WebSpeech", "3.0-alpha")
     |> fun bt -> bt.WithFramework(bt.Framework.Net40)
 
 let main =
