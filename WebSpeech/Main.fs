@@ -265,7 +265,7 @@ module Definition =
 
     let Assembly =
         Assembly [
-            Namespace "IntelliFactory.WebSharper.Html5" [
+            Namespace "IntelliFactory.WebSharper.JavaScript" [
                 Generic - ArrayLike
 
                 SpeechRecognition
