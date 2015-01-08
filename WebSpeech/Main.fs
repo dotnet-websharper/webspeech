@@ -112,7 +112,8 @@ module Definition =
         Class "SpeechRecognitionResult"
         |=> Inherits (ArrayLike SpeechRecognitionAlternative)
         |+> Protocol [
-            "final" =? T<bool>
+            //Should be "final" but Chrome has "isFinal"
+            "isFinal" =? T<bool>
         ]
 
     let SpeechRecognitionResultList =
