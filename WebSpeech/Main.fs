@@ -17,9 +17,9 @@ module Definition =
 
     //Not in the spec but may be useful
     let ArrayLike =
-        Generic / fun t1 ->
+        Generic - fun t1 ->
             Class "ArrayLike"
-            |+> Protocol [
+            |+> Instance [
                 "length" =? Ulong
                 "item" => Ulong?index ^-> t1
             ]
@@ -27,11 +27,11 @@ module Definition =
     let SpeechRecognition =
         Class "SpeechRecognition"
         |=> Inherits T<EventTarget>
-        |+> [ 
+        |+> Static [ 
             Constructor O 
             |> WithInline "new (window.SpeecRecognition || window.webkitSpeechRecognition)()"
         ]
-        |+> Protocol [
+        |+> Instance [
             "grammars" =@ SpeechGrammarList
             |> WithComment "Stores the collection of SpeechGrammar objects which represent the grammars that are active for this recognition."
             "lang" =@ T<string>
@@ -94,14 +94,14 @@ module Definition =
             ]
             |=> ErrorCode
         ]
-        |+> Protocol [
+        |+> Instance [
             "error" =? ErrorCode
             "message" =? T<string>
         ]
 
     let SpeechRecognitionAlternative =
         Class "SpeechRecognitionAlternative"
-        |+> Protocol [
+        |+> Instance [
             "transcript" =? T<string>
             |> WithComment "The transcript string represents the raw words that the user spoke." 
             "confidence" =? T<float>
@@ -110,21 +110,21 @@ module Definition =
 
     let SpeechRecognitionResult = 
         Class "SpeechRecognitionResult"
-        |=> Inherits (ArrayLike SpeechRecognitionAlternative)
-        |+> Protocol [
+        |=> Inherits (ArrayLike.[SpeechRecognitionAlternative])
+        |+> Instance [
             //Should be "final" but Chrome has "isFinal"
             "isFinal" =? T<bool>
         ]
 
     let SpeechRecognitionResultList =
         Class "SpeechRecognitionResultList"
-        |=> Inherits (ArrayLike SpeechRecognitionResult)
+        |=> Inherits (ArrayLike.[SpeechRecognitionResult])
 
     let SpeechRecognitionEventClass =
         Class "SpeechRecognitionEvent"
         |=> SpeechRecognitionEvent
         |=> Inherits Event
-        |+> Protocol [
+        |+> Instance [
             "resultIndex" =? Ulong
             |> WithComment "The lowest index in the results array that has changed."
             "results" =? SpeechRecognitionResultList
@@ -139,8 +139,8 @@ module Definition =
     let SpeechGrammarClass =
         Class "SpeechGrammar"
         |=> SpeechGrammar
-        |+> [ Constructor O ]
-        |+> Protocol [
+        |+> Static [ Constructor O ]
+        |+> Instance [
             "src" =? T<string>
             |> WithComment "The required src attribute is the URI for the grammar."
             "weight" =? T<float>
@@ -150,9 +150,9 @@ module Definition =
     let SpeechGrammarListClass =
         Class "SpeechGrammarList"
         |=> SpeechGrammarList
-        |=> Inherits (ArrayLike SpeechGrammar)
-        |+> [ Constructor O ]
-        |+> Protocol [
+        |=> Inherits (ArrayLike.[SpeechGrammar])
+        |+> Static [ Constructor O ]
+        |+> Instance [
             "addFromURI" => (T<string>?src * !? T<float>?weight) ^-> O
             "addFromString" => (T<string>?src * !? T<float>?wight) ^-> O
         ]
@@ -163,7 +163,7 @@ module Definition =
 
     let SpeechSynthesis =
         Class "SpeechSynthesis"
-        |+> Protocol [
+        |+> Instance [
             "pending" =? T<bool>
             |> WithComment "This attribute is true if the queue for the global SpeechSynthesis instance contains any utterances which have not started speaking."
             "speaking" =? T<bool>
@@ -186,14 +186,14 @@ module Definition =
 
     let SpeechSynthesisGetter =
         Class "window"
-        |+> [
+        |+> Static [
             "speechSynthesis" =? SpeechSynthesis
         ]
 
     let SpeechSynthesisEvent =
         Class "SpeechSynthesisEvent"
         |=> Event
-        |+> Protocol [
+        |+> Instance [
             "charIndex" =? Ulong
             |> WithComment "This attribute indicates the zero-based character index into the original utterance string \
                             that most closely approximates the current speaking position of the speech engine."
@@ -207,11 +207,11 @@ module Definition =
         Class "SpeechSynthesisUtterance"
         |=> SpeechSynthesisUtterance
         |=> Inherits T<EventTarget>
-        |+> [
+        |+> Static [
             Constructor O
             Constructor T<string>?text
         ]
-        |+> Protocol [
+        |+> Instance [
             "text" =@ T<string>
             |> WithComment "This attribute specifies the text to be synthesized and spoken for this utterance."
             "lang" =@ T<string>
@@ -244,7 +244,7 @@ module Definition =
     let SpeechSynthesisVoiceClass =
         Class "SpeechSynthesisVoice"
         |=> SpeechSynthesisVoice
-        |+> Protocol [
+        |+> Instance [
             "voiceURI" =? T<string>
             |> WithComment "The voiceURI attribute specifies the speech synthesis voice and the location of the speech synthesis service for this voice."
             "name" =? T<string>
@@ -261,13 +261,13 @@ module Definition =
     let SpeechSynthesisVoiceListClass =
         Class "SpeechSynthesisVoiceList"
         |=> SpeechSynthesisVoiceList
-        |=> Inherits (ArrayLike SpeechSynthesisVoice)
-        |+> [ Constructor O ]
+        |=> Inherits (ArrayLike.[SpeechSynthesisVoice])
+        |+> Static [ Constructor O ]
 
     let Assembly =
         Assembly [
             Namespace "IntelliFactory.WebSharper.JavaScript" [
-                Generic - ArrayLike
+                ArrayLike
 
                 SpeechRecognition
                 SpeechRecognitionErrorClass
