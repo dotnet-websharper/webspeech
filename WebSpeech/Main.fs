@@ -1,9 +1,9 @@
 namespace SpeechAPI
 
-open IntelliFactory.WebSharper.InterfaceGenerator
+open WebSharper.InterfaceGenerator
 
 module Definition =
-    open IntelliFactory.WebSharper.JavaScript.Dom
+    open WebSharper.JavaScript.Dom
 
     let O = T<unit>
     let Ulong =  T<int>
