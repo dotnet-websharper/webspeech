@@ -8,7 +8,7 @@ let bt =
         .WithFramework(fun fw -> fw.Net40)
 
 let main =
-    (bt.WebSharper.Extension("WebSharper.WebSpeech")
+    (bt.Zafir.Extension("WebSharper.WebSpeech")
     |> FSharpConfig.BaseDir.Custom "WebSpeech")
         .SourcesFromProject("WebSpeech.fsproj")
 
