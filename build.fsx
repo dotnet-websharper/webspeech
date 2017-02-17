@@ -8,13 +8,11 @@ let bt =
         .WithFramework(fun fw -> fw.Net40)
 
 let main =
-    (bt.WebSharper.Extension("IntelliFactory.WebSharper.WebSpeech")
-    |> FSharpConfig.BaseDir.Custom "WebSpeech")
+    bt.WebSharper.Extension("IntelliFactory.WebSharper.WebSpeech", directory = "WebSpeech")
         .SourcesFromProject("WebSpeech.fsproj")
 
 (*let test =
-    (bt.WebSharper.BundleWebsite("IntelliFactory.WebSharper.WebRTC.Tests")
-    |> FSharpConfig.BaseDir.Custom "Tests")
+    bt.WebSharper.BundleWebsite("IntelliFactory.WebSharper.WebRTC.Tests", directory = "Tests")
         .SourcesFromProject("Tests.fsproj")
         .References(fun r -> [r.Project main])*)
 
