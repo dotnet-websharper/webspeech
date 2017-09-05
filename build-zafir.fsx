@@ -2,13 +2,13 @@
 open IntelliFactory.Build
 
 let bt =
-    BuildTool().PackageId("Zafir.WebSpeech")
-        .VersionFrom("Zafir")
+    BuildTool().PackageId("WebSharper.WebSpeech")
+        .VersionFrom("WebSharper")
         .WithFSharpVersion(FSharpVersion.FSharp30)
         .WithFramework(fun fw -> fw.Net40)
 
 let main =
-    bt.Zafir.Extension("WebSharper.WebSpeech", directory = "WebSpeech")
+    bt.WebSharper4.Extension("WebSharper.WebSpeech", directory = "WebSpeech")
         .SourcesFromProject("WebSpeech.fsproj")
 
 (*let test =
@@ -23,7 +23,7 @@ bt.Solution [
     bt.NuGet.CreatePackage()
         .Configure(fun c ->
             { c with
-                Title = Some "Zafir.WebSpeech"
+                Title = Some "WebSharper.WebSpeech"
                 LicenseUrl = Some "http://websharper.com/licensing"
                 ProjectUrl = Some "https://bitbucket.org/intellifactory/websharper.webspeech"
                 Description = "WebSharper Extensions for WebSpeech"
