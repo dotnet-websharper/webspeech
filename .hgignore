@@ -1,6 +1,12 @@
 syntax: glob
-WebSpeech/bin/*
-WebSpeech/obj/*
-build/*
-packages/*
+
+bin/
+obj/
+build/
+packages/
 *.suo
+.fake/
+paket-files/
+.vs/
+.vscode/
+nuget/*.paket.template
