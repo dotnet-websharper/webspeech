@@ -1,6 +1,10 @@
-
 bin/
 obj/
-/.fake/
-/paket-files/
-/.vscode/
+build/
+packages/
+*.suo
+.fake/
+paket-files/
+.vs/
+.vscode/
+nuget/*.paket.template
