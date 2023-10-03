@@ -216,18 +216,47 @@ module Definition =
             "charIndex" =? Ulong
             |> WithComment "This attribute indicates the zero-based character index into the original utterance string \
                             that most closely approximates the current speaking position of the speech engine."
+            "charLength" =? Ulong
+            |> WithComment "Returns the number of characters left to be spoken after the charIndex position, if the speaking engine supports it. Returns 0 if the speaking engine can't provide the information."
+            "utterance" =? SpeechSynthesisUtterance
+            |> WithComment "Returns the SpeechSynthesisUtterance instance that the event was triggered on."
             "elapsedTime" =? T<float>
             |> WithComment "This attribute indicates the time, in seconds, that this event triggered, relative to when this utterance has begun to be spoken. "
             "name" =? T<string>
             |> WithComment "For mark events, this attribute indicates the name of the marker, as defined in SSML as the name attribute of a mark element."
         ]
-
+    let SpeechSynthesisErrorEvent =
+        let SpeechSynthesisErrorType =
+            Pattern.EnumStrings "SpeechSynthesisErrorEvent.ErrorType" [
+                "canceled"
+                "interrupted"
+                "audio-busy"
+                "audio-hardware"
+                "network"
+                "synthesis-unavailable"
+                "synthesis-failed"
+                "language-unavailable"
+                "voice-unavailable"
+                "text-too-long"
+                "invalid-argument"
+                "not-allowed"
+            ]
+        let SpeechSynthesisErrorEventOptions =
+            Class "SpeechSynthesisErrorEvent.ErrorOptions"
+            |+> Static [
+                ObjectConstructor (SpeechSynthesisErrorType?error)
+            ]
+        Class "SpeechSynthesisErrorEvent"
+        |=> Inherits SpeechSynthesisEvent
+        |=> Nested [SpeechSynthesisErrorType;SpeechSynthesisErrorEventOptions]
+        |+> Static [
+            Constructor (SpeechSynthesisErrorType?``type`` * SpeechSynthesisErrorEventOptions?``options``)
+        ]
     let SpeechSynthesisUtteranceClass =
         Class "SpeechSynthesisUtterance"
         |=> SpeechSynthesisUtterance
         |=> Inherits T<EventTarget>
         |+> Static [
-            Constructor O
             Constructor T<string>?text
         ]
         |+> Instance [
@@ -235,8 +264,8 @@ module Definition =
             |> WithComment "This attribute specifies the text to be synthesized and spoken for this utterance."
             "lang" =@ T<string>
             |> WithComment "This attribute specifies the language of the speech synthesis for the utterance, using a valid BCP 47 language tag."
-            "voiceURI" =@ T<string>
-            |> WithComment "The voiceURI attribute specifies speech synthesis voice and the location of the speech synthesis service that the web application wishes to use."
+            "voice" =@ SpeechSynthesisVoice
+            |> WithComment "The voice property of the SpeechSynthesisUtterance interface gets and sets the voice that will be used to speak the utterance."
             "volume" =@ T<float>
             |> WithComment "This attribute specifies the speaking volume for the utterance."
             "rate" =@ T<float>
@@ -299,6 +328,7 @@ module Definition =
                 SpeechSynthesis
                 SpeechSynthesisGetter
                 SpeechSynthesisEvent
+                SpeechSynthesisErrorEvent
                 SpeechSynthesisUtteranceClass
                 SpeechSynthesisVoiceClass
                 SpeechSynthesisVoiceListClass
