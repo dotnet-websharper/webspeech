@@ -28,11 +28,21 @@ module Definition =
     let Ulong =  T<int>
     let Event = T<Event>
 
-    let SpeechGrammarList = Type.New ()
-    let SpeechGrammar = Type.New ()
-    let ErrorCode = Type.New ()
-    let SpeechRecognitionEvent = Type.New ()
-    let SpeechRecognitionError = Type.New ()
+    let SpeechGrammarList = Class "SpeechGrammarList"
+    let SpeechGrammar = Class "SpeechGrammar"
+    let ErrorCode = 
+        Pattern.EnumStrings "ErrorCode" [
+            "no-speech"
+            "aborted"
+            "audio-capture"
+            "network"
+            "not-allowed"
+            "service-not-allowed"
+            "bad-grammar"
+            "language-not-supported"
+        ]
+    let SpeechRecognitionEvent = Class "SpeechRecognitionEvent"
+    let SpeechRecognitionError = Class "SpeechRecognitionError"
 
     //Not in the spec but may be useful
     let ArrayLike =
@@ -48,7 +58,7 @@ module Definition =
         |=> Inherits T<EventTarget>
         |+> Static [ 
             Constructor O 
-            |> WithInline "new (window.SpeecRecognition || window.webkitSpeechRecognition)()"
+            |> WithInline "new (window.SpeechRecognition || window.webkitSpeechRecognition)()"
         ]
         |+> Instance [
             "grammars" =@ SpeechGrammarList
@@ -96,27 +106,16 @@ module Definition =
             |> WithComment "Fired when the service has disconnected."
         ]
 
-    let SpeechRecognitionErrorClass =
-        Class "SpeechRecognitionError"
-        |=> SpeechRecognitionError
+    SpeechRecognitionError
         |=> Inherits Event
         |=> Nested [
-            Pattern.EnumStrings "ErrorCode" [
-                "no-speech"
-                "aborted"
-                "audio-capture"
-                "network"
-                "not-allowed"
-                "service-not-allowed"
-                "bad-grammar"
-                "language-not-supported"
-            ]
-            |=> ErrorCode
+            ErrorCode
         ]
         |+> Instance [
             "error" =? ErrorCode
             "message" =? T<string>
         ]
+        |> ignore
 
     let SpeechRecognitionAlternative =
         Class "SpeechRecognitionAlternative"
@@ -139,9 +138,7 @@ module Definition =
         Class "SpeechRecognitionResultList"
         |=> Inherits (ArrayLike.[SpeechRecognitionResult])
 
-    let SpeechRecognitionEventClass =
-        Class "SpeechRecognitionEvent"
-        |=> SpeechRecognitionEvent
+    SpeechRecognitionEvent
         |=> Inherits Event
         |+> Instance [
             "resultIndex" =? Ulong
@@ -154,10 +151,9 @@ module Definition =
             "emma" =? T<Document>
             |> WithComment "EMMA 1.0 representation of this result."
         ]
+        |> ignore
 
-    let SpeechGrammarClass =
-        Class "SpeechGrammar"
-        |=> SpeechGrammar
+    SpeechGrammar
         |+> Static [ Constructor O ]
         |+> Instance [
             "src" =? T<string>
@@ -165,20 +161,20 @@ module Definition =
             "weight" =? T<float>
             |> WithComment "The optional weight attribute controls the weight that the speech recognition service should use with this grammar."
         ]
+        |> ignore
 
-    let SpeechGrammarListClass =
-        Class "SpeechGrammarList"
-        |=> SpeechGrammarList
+    SpeechGrammarList
         |=> Inherits (ArrayLike.[SpeechGrammar])
         |+> Static [ Constructor O ]
         |+> Instance [
             "addFromURI" => (T<string>?src * !? T<float>?weight) ^-> O
             "addFromString" => (T<string>?src * !? T<float>?wight) ^-> O
         ]
+        |> ignore
 
-    let SpeechSynthesisUtterance = Type.New ()
-    let SpeechSynthesisVoiceList = Type.New ()
-    let SpeechSynthesisVoice = Type.New ()
+    let SpeechSynthesisUtterance = Class "SpeechSynthesisUtterance"
+    let SpeechSynthesisVoiceList = Class "SpeechSynthesisVoiceList"
+    let SpeechSynthesisVoice = Class "SpeechSynthesisVoice"
 
     let SpeechSynthesis =
         Class "SpeechSynthesis"
@@ -211,7 +207,7 @@ module Definition =
 
     let SpeechSynthesisEvent =
         Class "SpeechSynthesisEvent"
-        |=> Event
+        |=> Inherits Event
         |+> Instance [
             "charIndex" =? Ulong
             |> WithComment "This attribute indicates the zero-based character index into the original utterance string \
@@ -252,9 +248,8 @@ module Definition =
         |+> Static [
             Constructor (SpeechSynthesisErrorType?``type`` * SpeechSynthesisErrorEventOptions?``options``)
         ]
-    let SpeechSynthesisUtteranceClass =
-        Class "SpeechSynthesisUtterance"
-        |=> SpeechSynthesisUtterance
+
+    SpeechSynthesisUtterance
         |=> Inherits T<EventTarget>
         |+> Static [
             Constructor T<string>?text
@@ -288,10 +283,9 @@ module Definition =
             "onboundary" =@ SpeechSynthesisEvent ^-> O
             |> WithComment "Fired when the spoken utterance reaches a word or sentence boundary."
         ]
+        |> ignore
 
-    let SpeechSynthesisVoiceClass =
-        Class "SpeechSynthesisVoice"
-        |=> SpeechSynthesisVoice
+    SpeechSynthesisVoice
         |+> Instance [
             "voiceURI" =? T<string>
             |> WithComment "The voiceURI attribute specifies the speech synthesis voice and the location of the speech synthesis service for this voice."
@@ -305,12 +299,12 @@ module Definition =
             |> WithComment "Indicates whether the voice is the default voice of the given language."
 
         ]
+        |> ignore
     
-    let SpeechSynthesisVoiceListClass =
-        Class "SpeechSynthesisVoiceList"
-        |=> SpeechSynthesisVoiceList
+    SpeechSynthesisVoiceList
         |=> Inherits (ArrayLike.[SpeechSynthesisVoice])
         |+> Static [ Constructor O ]
+        |> ignore
 
     let Assembly =
         Assembly [
@@ -318,20 +312,20 @@ module Definition =
                 ArrayLike
 
                 SpeechRecognition
-                SpeechRecognitionErrorClass
+                SpeechRecognitionError
                 SpeechRecognitionAlternative
                 SpeechRecognitionResult
                 SpeechRecognitionResultList
-                SpeechRecognitionEventClass
-                SpeechGrammarClass
-                SpeechGrammarListClass
+                SpeechRecognitionEvent
+                SpeechGrammar
+                SpeechGrammarList
                 SpeechSynthesis
                 SpeechSynthesisGetter
                 SpeechSynthesisEvent
                 SpeechSynthesisErrorEvent
-                SpeechSynthesisUtteranceClass
-                SpeechSynthesisVoiceClass
-                SpeechSynthesisVoiceListClass
+                SpeechSynthesisUtterance
+                SpeechSynthesisVoice
+                SpeechSynthesisVoiceList
             ]
         ]
 

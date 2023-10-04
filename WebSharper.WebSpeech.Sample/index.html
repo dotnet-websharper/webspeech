@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebSharper.WebSpeech</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="Content/WebSharper.WebSpeech.Sample.head.js"></script>
+    <link rel="stylesheet" type="text/css" href="Content/Site.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="Style.css">
+    <style>
+        [ws-template], [ws-children-template] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">WebSharper.WebSpeech</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="https://github.com/intellifactory/websharper.webspeech">Source</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="http://websharper.com">WebSharper</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="display:none">
+
+        <div id="SpeechUtterance">
+            <p>
+                Have the computer talk to you in more than four different languages.
+            </p>
+        </div>
+        <div id="SpeechSynthesis">
+            <p>
+                Talk to the computer and watch the result.
+            </p>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div>
+                    <ul id="sample-navs" class="nav nav-pills">
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="skip">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="sample-main">
+                        <div ws-replace="SampleContent">
+                            <div ws-template="SpeechSynthesis" ws-onafterrender="SynthesisInit">
+                                <p>
+                                    Talk to the computer and watch the result.
+                                </p>
+                                <div>Speak loud and clear!</div>
+                                <pre style="width:550px; height:300px; overflow-y:scroll; display:block;">${PreText}</pre>
+                                <button ws-onclick="OnStart" ws-attr="StartAttr">Start</button>
+                                <button ws-onclick="OnStop" ws-attr="StopAttr">Stop</button>
+                            </div>
+                            <div ws-template="SpeechUtterance" ws-onafterrender="UtteranceInit">
+                                <p>
+                                    Have the computer talk to you in more than four different languages.
+                                </p>
+                                <div ws-replace="UtteranceSamples" style="display:flex; flex-direction: row;">
+                                    <div ws-children-template="UtteranceField" style="margin:5px; display:inline-flex;flex-direction:column;">
+                                        <input type="text" width="200" ws-var="Text" value="${Text}" />
+
+                                        <button ws-onclick="OnSpeak">Speak!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">About</div>
+                <div class="panel-body">
+                    <div>
+                        <div class="sample-side" ws-template="SpeechSide" ws-onafterrender="SideInit">
+                            <a class="btn btn-primary btn-lg" href="${GitHubUrl}">Source</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="Content/WebSharper.WebSpeech.Sample.js"></script>
+</body>
+</html>

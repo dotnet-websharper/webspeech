@@ -3,6 +3,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <WebSharperProject>binding</WebSharperProject>
     <WebSharperSourceMap>false</WebSharperSourceMap>
+    <WebSharperStandAlone>true</WebSharperStandAlone>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Product>WebSharper.WebSpeech</Product>
     <Title>https://github.com/dotnet-websharper/webspeech/</Title>

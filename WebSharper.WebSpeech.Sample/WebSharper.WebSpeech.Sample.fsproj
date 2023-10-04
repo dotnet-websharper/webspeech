@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Samples.fs" />
+    <Compile Include="SpeechSynthesis.fs" />
+    <Compile Include="SpeechUtterance.fs" />
+    <Compile Include="SpeechRecognition.fs" />
+    <Compile Include="Client.fs" />
+	  <Content Include="unused.html" />
+	  <Content Include="index.html" />
+    <None Include="wsconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebSharper.WebSpeech\WebSharper.WebSpeech.fsproj" />
+  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>
