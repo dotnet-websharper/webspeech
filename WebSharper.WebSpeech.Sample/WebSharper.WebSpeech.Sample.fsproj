@@ -9,8 +9,8 @@
     <Compile Include="SpeechUtterance.fs" />
     <Compile Include="SpeechRecognition.fs" />
     <Compile Include="Client.fs" />
-	  <Content Include="unused.html" />
-	  <Content Include="index.html" />
+	<Content Include="index.html" />
+	  <Content Include="Styles.css" />
     <None Include="wsconfig.json" />
   </ItemGroup>
   <ItemGroup>

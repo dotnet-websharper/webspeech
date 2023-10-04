@@ -16,50 +16,49 @@ module Client =
     type SampleTypes =
     | SpeechSynthesis
     | SpeechUtterance
+    | SpeechRecognition
 
     [<SPAEntryPoint>]
     let Main() =
         //All.Show()
-        let shownType = Var.Create<SampleTypes option> None
+        let shownType = Var.Create<SampleTypes> SpeechSynthesis
         
         let navChild title sampleType = 
             shownType.View 
             |> Doc.BindView(fun t -> 
                 li [
-                    let isActive = t = Some sampleType
+                    let isActive = t = sampleType
                     if isActive 
                     then attr.``class`` "active"
-                    else on.click (fun _ _ -> shownType.Set <| Some sampleType)
-                ] [text title])
+                    else on.click (fun _ _ -> shownType.Set <| sampleType)
+                ] [a [attr.href "#"] [text title]])
 
         Doc.Concat [
             navChild "Speech Synthesis" SampleTypes.SpeechSynthesis
             navChild "Speech Utterance" SampleTypes.SpeechUtterance
+            navChild "Speech Recognition+Punctuator" SampleTypes.SpeechRecognition
         ] 
         |> Doc.RunById("sample-navs")
 
         Templates.Index.SpeechSide()
             .GitHubUrl(shownType.View.Map(fun st ->
-                let fileName = 
-                    match st with
-                    | Some s -> sprintf "%A.fs" s
-                    | None -> "Client.fs"
+                let fileName = sprintf "%A.fs" st
                 $"http://github.com/intellifactory/websharper.webspeech/blob/master/Site/{fileName}" 
             )).Doc() 
         |> Doc.RunById "sample-side"
 
         shownType.View
         |> Doc.BindView (function
-                | Some SpeechSynthesis ->
+                | SpeechSynthesis ->
                     let txt = Var.Create ""
                     let isPlaying = Var.Create false
                     let speechRecog = SpeechSynthesis.SpeechRecognize txt
                     Templates.Index.SpeechSynthesis()
                         .StartAttr(
-                            attr.disabledBool (isPlaying.View)
+                            attr.disabledBool isPlaying.View
                         )
                         .StopAttr(
-                            attr.disabledBool (isPlaying.View.Map(not))
+                            attr.disabledBool <| isPlaying.View.Map(not)
                         )
                         .OnStart(fun _ -> 
                             speechRecog.Start()
@@ -71,7 +70,7 @@ module Client =
                         )
                         .PreText(txt.View)
                         .Doc()
-                | Some SpeechUtterance -> 
+                | SpeechUtterance -> 
                     Templates.Index.SpeechUtterance()
                         .UtteranceSamples(
                             SpeechUtterance.Texts 
@@ -92,7 +91,33 @@ module Client =
                             |> Doc.Concat
                         )
                         .Doc()
-                | _ -> div [] []
+                | SpeechRecognition ->
+                    let isRunning = Var.Create false
+                    let intermediateResult = Var.Create ""
+                    let recognizerResult = Var.Create<string list> []
+                    let recognizer = SpeechRecognition.speechRecognize intermediateResult recognizerResult
+
+                    let isDisabledDynPred(invert:bool) = 
+                        attr.disabledDynPred 
+                        <|| (isRunning.View.Map(function | true -> "disabled" | _ -> ""), isRunning.View|> if invert then View.Map(not) else id)
+                    
+                    Templates.Index.SpeechRecognition()
+                        .Start(fun _ -> 
+                            isRunning.Set true
+                            recognizer.Start()
+                        )
+                        .End(fun _ -> 
+                            isRunning.Set false
+                            recognizer.Stop()
+                        )
+                        .IsActive(isRunning.View.Map(function | true -> "pulse" | _ -> ""))
+                        .StartAttr(isDisabledDynPred(false))
+                        .EndAttr(isDisabledDynPred(true))
+                        .WithoutPunctuation(intermediateResult.View.Doc text)
+                        .WithPunctuation(recognizerResult.View.DocSeqCached(fun p ->
+                            div [attr.``class`` "result"] [text p]
+                        ))
+                        .Doc()
             ) 
             |> Doc.RunById "sample-main"
             

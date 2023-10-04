@@ -42,19 +42,6 @@
             </div>
         </div>
     </nav>
-    <div style="display:none">
-
-        <div id="SpeechUtterance">
-            <p>
-                Have the computer talk to you in more than four different languages.
-            </p>
-        </div>
-        <div id="SpeechSynthesis">
-            <p>
-                Talk to the computer and watch the result.
-            </p>
-        </div>
-    </div>
 
     <div class="container-fluid">
         <div class="row">
@@ -89,11 +76,29 @@
                                     Have the computer talk to you in more than four different languages.
                                 </p>
                                 <div ws-replace="UtteranceSamples" style="display:flex; flex-direction: row;">
-                                    <div ws-children-template="UtteranceField" style="margin:5px; display:inline-flex;flex-direction:column;">
-                                        <input type="text" width="200" ws-var="Text" value="${Text}" />
+                                </div>
+                            </div>
 
-                                        <button ws-onclick="OnSpeak">Speak!</button>
-                                    </div>
+                            <div ws-template="UtteranceField" style="margin:5px; display:inline-block;">
+                                <textarea title="UtteranceLabel" width="200" ws-var="Text" value="${Text}"></textarea>
+                                <br />
+                                <button ws-onclick="OnSpeak">Speak!</button>
+                            </div>
+                            <div ws-template="SpeechRecognition">
+                                <div class="panel">
+                                    <button ws-attr="StartAttr" ws-onclick="Start">Start</button>
+                                    <button ws-attr="EndAttr" ws-onclick="End">End</button>
+                                    <span class="indicator ${IsActive}">
+                                        <i class="fa fa-microphone" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="panel">
+                                    <h3>Current recognizer: </h3>
+                                    <div ws-hole="WithoutPunctuation"></div>
+                                </div>
+                                <div class="panel">
+                                    <h3>Punctuated results: </h3>
+                                    <div ws-hole="WithPunctuation"></div>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +110,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">About</div>
                 <div class="panel-body">
-                    <div>
+                    <div id="sample-side">
                         <div class="sample-side" ws-template="SpeechSide" ws-onafterrender="SideInit">
                             <a class="btn btn-primary btn-lg" href="${GitHubUrl}">Source</a>
                         </div>
