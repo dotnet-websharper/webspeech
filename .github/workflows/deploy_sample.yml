@@ -17,49 +17,49 @@ concurrency:
 
 jobs:
   build:
-  runs-on: windows-latest
+    runs-on: windows-latest
 
-  steps:
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2.1.1
-      with:
-        dotnet-version: 6.0.x
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2.1.1
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Add GitHub registry NuGet source
-      run: 
-        dotnet nuget 
-          add source https://nuget.pkg.github.com/dotnet-websharper/index.json 
-          --name github 
-          --username intellifactory-gh 
-          --password ${{ secrets.PAT_PACKAGE }} 
-          --store-password-in-clear-text
-        
-    - name: Install Paket as global tool
-      run: dotnet tool install paket --global
+      - name: Add GitHub registry NuGet source
+        run: 
+          dotnet nuget 
+            add source https://nuget.pkg.github.com/dotnet-websharper/index.json 
+            --name github 
+            --username intellifactory-gh 
+            --password ${{ secrets.PAT_PACKAGE }} 
+            --store-password-in-clear-text
+          
+      - name: Install Paket as global tool
+        run: dotnet tool install paket --global
 
-    - name: Add credentials for Paket
-      run:
-        paket config
-          add-credentials https://nuget.pkg.github.com/dotnet-websharper/index.json
-          --username intellifactory-gh 
-          --password ${{ secrets.PAT_PACKAGE }}
+      - name: Add credentials for Paket
+        run:
+          paket config
+            add-credentials https://nuget.pkg.github.com/dotnet-websharper/index.json
+            --username intellifactory-gh 
+            --password ${{ secrets.PAT_PACKAGE }}
 
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        submodules: recursive
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
-    - name: Setup Pages
-      id: pages
-      uses: actions/configure-pages@v3
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v3
 
-    - name: Build and Preparse
-      run: ./build.cmd SampleBuild
+      - name: Build and Preparse
+        run: ./build.cmd SampleBuild
 
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v2
-      with:
-        path: ./dist
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./dist
     
   deploy:
     environment:
