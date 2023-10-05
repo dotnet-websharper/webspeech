@@ -1,9 +1,7 @@
 type file
 id WebSharper.WebSpeech
-authors
-    IntelliFactory
-owners
-    IntelliFactory
+authors IntelliFactory
+owners IntelliFactory
 licenseUrl http://websharper.com/licensing
 projectUrl https://bitbucket.org/intellifactory/websharper.webspeech
 description
@@ -11,8 +9,6 @@ description
 tags
     Web JavaScript F# C#
 files
-    ../WebSharper.WebSpeech/bin/Release/net461/WebSharper.WebSpeech.dll ==> lib/net461
-    ../WebSharper.WebSpeech/bin/Release/net461/WebSharper.WebSpeech.xml ==> lib/net461
     ../WebSharper.WebSpeech/bin/Release/netstandard2.0/WebSharper.WebSpeech.dll ==> lib/netstandard2.0
     ../WebSharper.WebSpeech/bin/Release/netstandard2.0/WebSharper.WebSpeech.xml ==> lib/netstandard2.0
 dependencies

@@ -1,0 +1,73 @@
+name: Deploy WebSharper.WebSpeech.Sample
+
+on:
+  push:
+    branches: [websharper70]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+  runs-on: windows-lates
+
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2.1.1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Add GitHub registry NuGet source
+      run: 
+        dotnet nuget 
+          add source https://nuget.pkg.github.com/dotnet-websharper/index.json 
+          --name github 
+          --username intellifactory-gh 
+          --password ${{ secrets.PAT_PACKAGE }} 
+          --store-password-in-clear-text
+        
+    - name: Install Paket as global tool
+      run: dotnet tool install paket --global
+
+    - name: Add credentials for Paket
+      run:
+        paket config
+          add-credentials https://nuget.pkg.github.com/dotnet-websharper/index.json
+          --username intellifactory-gh 
+          --password ${{ secrets.PAT_PACKAGE }}
+
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Setup Pages
+      id: pages
+      uses: actions/configure-pages@v3
+
+    - name: Build and Preparse
+      run: ./build.cmd SampleBuild
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: ./dist
+    
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

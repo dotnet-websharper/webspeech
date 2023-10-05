@@ -1,6 +1,6 @@
 STORAGE: NONE
 STRATEGY: MIN
-RESTRICTION: || (== net6.0) (== netstandard2.0)
+RESTRICTION: == netstandard2.0
 NUGET
   remote: https://api.nuget.org/v3/index.json
     FSharp.Core (6.0)
@@ -147,9 +147,9 @@ NUGET
       System.IO (>= 4.3)
       System.Reflection.Primitives (>= 4.3)
       System.Runtime (>= 4.3)
-    System.Reflection.Emit.ILGeneration (4.7) - restriction: || (&& (== net6.0) (< netcoreapp2.0) (< netstandard2.1)) (&& (== net6.0) (< netstandard2.0)) (&& (== net6.0) (< portable-net45+wp8)) (&& (== net6.0) (>= uap10.1)) (== netstandard2.0)
+    System.Reflection.Emit.ILGeneration (4.7)
     System.Reflection.Emit.Lightweight (4.7)
-      System.Reflection.Emit.ILGeneration (>= 4.7) - restriction: || (&& (== net6.0) (< netcoreapp2.0) (< netstandard2.1)) (&& (== net6.0) (< netstandard2.0)) (&& (== net6.0) (< portable-net45+wp8)) (&& (== net6.0) (>= uap10.1)) (== netstandard2.0)
+      System.Reflection.Emit.ILGeneration (>= 4.7)
     System.Reflection.Primitives (4.3)
       Microsoft.NETCore.Platforms (>= 1.1)
       Microsoft.NETCore.Targets (>= 1.1)
@@ -295,12 +295,12 @@ NUGET
       System.Runtime (>= 4.3)
       System.Text.Encoding (>= 4.3)
     System.Text.RegularExpressions (4.3)
-      System.Collections (>= 4.3) - restriction: || (&& (== net6.0) (< netcoreapp1.1)) (== netstandard2.0)
-      System.Globalization (>= 4.3) - restriction: || (&& (== net6.0) (< netcoreapp1.1)) (== netstandard2.0)
-      System.Resources.ResourceManager (>= 4.3) - restriction: || (&& (== net6.0) (< netcoreapp1.1)) (== netstandard2.0)
+      System.Collections (>= 4.3)
+      System.Globalization (>= 4.3)
+      System.Resources.ResourceManager (>= 4.3)
       System.Runtime (>= 4.3)
-      System.Runtime.Extensions (>= 4.3) - restriction: || (&& (== net6.0) (< netcoreapp1.1)) (== netstandard2.0)
-      System.Threading (>= 4.3) - restriction: || (&& (== net6.0) (< netcoreapp1.1)) (== netstandard2.0)
+      System.Runtime.Extensions (>= 4.3)
+      System.Threading (>= 4.3)
     System.Threading (4.3)
       System.Runtime (>= 4.3)
       System.Threading.Tasks (>= 4.3)
@@ -360,14 +360,15 @@ NUGET
       System.Xml.ReaderWriter (>= 4.3)
       System.Xml.XmlDocument (>= 4.3)
       System.Xml.XPath (>= 4.3)
-  remote: https://nuget.pkg.github.com/dotnet-websharper/index.json
-    WebSharper (7.0.1.337-beta2)
+  remote: ../localnuget
+    WebSharper (7.0.1.566-beta2)
       FSharp.Core (>= 6.0)
       System.Reflection.Emit.Lightweight (>= 4.7)
-    WebSharper.FSharp (7.0.1.337-beta2)
-      WebSharper (7.0.1.337-beta2)
-    WebSharper.MathJS (7.0.1.337-beta2)
-      WebSharper (7.0.1.337-beta2)
+    WebSharper.FSharp (7.0.1.566-beta2)
+      WebSharper (7.0.1.566-beta2)
+    WebSharper.MathJS (7.0.1.566-beta2)
+      WebSharper (7.0.1.566-beta2)
+  remote: https://nuget.pkg.github.com/dotnet-websharper/index.json
     WebSharper.UI (7.0.0.337-beta2)
       HtmlAgilityPack (>= 1.11)
       WebSharper (>= 7.0.1 < 7.1)

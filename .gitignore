@@ -14,3 +14,4 @@ obj/
 .idea/
 .vite/
 *.user
+dist/

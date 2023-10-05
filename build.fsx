@@ -31,4 +31,24 @@ let targets =
     WSTargets.Default (fun () -> GetSemVerOf "WebSharper" |> ComputeVersion)
     |> MakeTargets
 
+let rec CopyDirectory source dest =
+    let dif = System.IO.DirectoryInfo(source)
+    System.IO.Directory.CreateDirectory dest
+    for file in dif.GetFiles() do
+        let targetPath = System.IO.Path.Combine(dest, file.Name)
+        file.CopyTo targetPath
+    for dir in dif.GetDirectories() do
+        let newDir = System.IO.Path.Combine(dest, dir.Name)
+        CopyDirectory dir.FullName newDir
+
+Target.create "SampleBuild" <| fun o ->
+    if System.IO.Directory.Exists "dist" then
+        System.IO.Directory.Delete("dist", true)
+    let di = System.IO.Directory.CreateDirectory "dist"
+    System.IO.File.Copy("WebSharper.WebSpeech.Sample/index.html", "dist/index.html")
+    System.IO.File.Copy("WebSharper.WebSpeech.Sample/Style.css", "dist/Style.css")
+    CopyDirectory "WebSharper.WebSpeech.Sample/Content" "dist/Content"
+
+"CI-Release" ==> "SampleBuild"
+
 Target.runOrDefault "Build"
