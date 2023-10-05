@@ -1,7 +1,7 @@
 ﻿{
   "$schema": "https://websharper.com/wsconfig.schema.json",
   "project": "spa",
-  "standalone": true,
   "outputDir": "Content",
+  "scriptBaseUrl": "./Content/",
   "sourceMap": false
 }
