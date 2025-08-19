@@ -1,10 +1,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36408.4 d17.14
+VisualStudioVersion = 17.14.36408.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.WebSpeech", "WebSharper.WebSpeech\WebSharper.WebSpeech.fsproj", "{81D89D09-3DB8-473E-A44C-455167D21584}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.WebSpeech.Sample", "WebSharper.WebSpeech.Sample\WebSharper.WebSpeech.Sample.fsproj", "{A02FDFDE-E4B8-4C13-BD04-F1730AC9CB21}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.WebSpeech.Extensions", "WebSharper.WebSpeech.Extensions\WebSharper.WebSpeech.Extensions.fsproj", "{04C41B9A-4F76-6C53-E208-8C2CDE25E294}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,18 @@ Global
 		{A02FDFDE-E4B8-4C13-BD04-F1730AC9CB21}.Release|x64.Build.0 = Release|Any CPU
 		{A02FDFDE-E4B8-4C13-BD04-F1730AC9CB21}.Release|x86.ActiveCfg = Release|Any CPU
 		{A02FDFDE-E4B8-4C13-BD04-F1730AC9CB21}.Release|x86.Build.0 = Release|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Debug|x64.Build.0 = Debug|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Debug|x86.Build.0 = Debug|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Release|x64.ActiveCfg = Release|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Release|x64.Build.0 = Release|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Release|x86.ActiveCfg = Release|Any CPU
+		{04C41B9A-4F76-6C53-E208-8C2CDE25E294}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

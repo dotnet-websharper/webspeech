@@ -309,7 +309,7 @@ module Definition =
 
     let Assembly =
         Assembly [
-            Namespace "WebSharper.JavaScript" [
+            Namespace "WebSharper.WebSpeech" [
                 ArrayLike
 
                 SpeechRecognition

@@ -8,4 +8,4 @@ module Extensions =
 
     type Window with
         [<Inline "$this.speechSynthesis">]
-        member this.Speech
+        member this.SpeechSynthesis with get(): SpeechSynthesis = X<SpeechSynthesis>

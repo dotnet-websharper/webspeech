@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebSharper.WebSpeech.Extensions\WebSharper.WebSpeech.Extensions.fsproj" />
     <ProjectReference Include="..\WebSharper.WebSpeech\WebSharper.WebSpeech.fsproj" />
   </ItemGroup>
 

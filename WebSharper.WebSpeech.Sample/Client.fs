@@ -6,6 +6,7 @@ open WebSharper.UI
 open WebSharper.UI.Notation
 open WebSharper.UI.Client
 open WebSharper.UI.Templating
+open WebSharper.WebSpeech
 
 [<JavaScript>]
 module Client =
@@ -41,8 +42,7 @@ module Client =
                 let utterance = new SpeechSynthesisUtterance(textInput.Value)
                 utterance.Lang <- "en-US"
                
-                let speechSynthesis = JS.Window?speechSynthesis |> As<SpeechSynthesis>
-                speechSynthesis.Speak(utterance)
+                JS.Window.SpeechSynthesis.Speak(utterance)
             )
             .Output(output.V)
             .TextInput(textInput.V)
