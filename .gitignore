@@ -7,3 +7,5 @@ packages/
 paket-files/
 .vs/
 .vscode/
+*/websharper.log
+*/build/
