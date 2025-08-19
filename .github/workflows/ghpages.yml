@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - update-binding
+      - master
   workflow_dispatch:
 
 jobs:
