@@ -17,7 +17,7 @@
 // permissions and limitations under the License.
 //
 // $end{copyright}
-namespace SpeechAPI
+namespace WebSharper.WebSpeech
 
 open WebSharper.InterfaceGenerator
 

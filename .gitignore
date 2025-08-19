@@ -9,3 +9,4 @@ paket-files/
 .vscode/
 */websharper.log
 */build/
+*/wwwroot/Scripts

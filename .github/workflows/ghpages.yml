@@ -1,0 +1,60 @@
+﻿﻿name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - update-binding
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./WebSharper.WebSpeech.Sample
+
+      - name: Install Paket as a .NET Tool
+        run: dotnet tool restore
+
+      - name: Add credentials for Paket
+        run:
+          dotnet tool run paket config
+            add-credentials https://nuget.pkg.github.com/dotnet-websharper/index.json
+            --username intellifactory-gh 
+            --password ${{ secrets.PAT_PACKAGE }}
+
+      - name: Restore Dependencies Using Paket
+        run: dotnet tool run paket restore
+
+      - name: Build WebSharper.WebSpeech
+        run: dotnet build WebSharper.WebSpeech/WebSharper.WebSpeech.fsproj
+
+      - name: Build Sample Project in Release mode
+        run: dotnet build --configuration Release
+        working-directory: ./WebSharper.WebSpeech.Sample
+
+      - name: Prepare Deployment
+        run: |
+          mkdir -p dist
+          cp -r WebSharper.WebSpeech.Sample/wwwroot/* dist/
+
+      - name: Deploy 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          publish_dir: dist

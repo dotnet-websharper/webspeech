@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebSharper.WebSpeech.Sample</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Scripts/WebSharper.WebSpeech.Sample.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] { display: none; }
+        input {
+            width: 300px;
+        }
+    </style>
+    <script type="text/javascript" src="Scripts/WebSharper.WebSpeech.Sample.head.js"></script>
+</head>
+<body>
+    <h1>Web Speech API Demo</h1>
+    <div>
+        <h2>How to Test</h2>
+        <ul>
+            <li>Click "Start Recognition", speak, and the recognized text appears next to "You said:".</li>
+            <li>Type anything (or leave default) and click "Speak Text" to hear it spoken.</li>
+        </ul>
+    </div>
+
+    <div id="main" ws-children-template="Main">
+        <div ws-onafterrender="PageInit">
+            <button ws-onclick="StartBtn">🎤 Start Recognition</button>
+            <p><strong>You said:</strong> ${Output}</p>
+
+            <button ws-onclick="SpeakBtn">🔊 Speak Text</button>
+            <input ws-var="TextInput" type="text" value="">
+        </div>
+    </div>
+    <script type="module" src="Scripts/WebSharper.WebSpeech.Sample.min.js"></script>
+</body>
+</html>

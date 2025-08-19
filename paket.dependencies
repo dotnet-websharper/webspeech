@@ -2,7 +2,7 @@ source https://api.nuget.org/v3/index.json
 source https://nuget.pkg.github.com/dotnet-websharper/index.json
 source ../localnuget
 
-framework: netstandard2
+framework: netstandard2, net9.0
 
 strategy: min
 storage: none
