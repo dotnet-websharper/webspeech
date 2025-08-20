@@ -10,3 +10,5 @@ paket-files/
 */websharper.log
 */build/
 */wwwroot/Scripts
+*/node_modules
+
