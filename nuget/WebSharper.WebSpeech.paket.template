@@ -1,11 +1,12 @@
 type file
 id WebSharper.WebSpeech
-authors
-    IntelliFactory
-owners
-    IntelliFactory
-licenseUrl http://websharper.com/licensing
-projectUrl https://bitbucket.org/intellifactory/websharper.webspeech
+authors IntelliFactory
+owners IntelliFactory
+projectUrl https://websharper.com/
+repositoryType git
+repositoryUrl https://github.com/dotnet-websharper/webspeech/
+licenseUrl https://github.com/dotnet-websharper/webspeech/blob/master/LICENSE.md
+iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
 description
     WebSharper Extensions for WebSpeech
 tags
@@ -15,3 +16,4 @@ files
     ../WebSharper.WebSpeech/bin/Release/netstandard2.0/WebSharper.WebSpeech.xml ==> lib/netstandard2.0
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
+
