@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <WebSharperProject>Library</WebSharperProject>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>FS0864</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

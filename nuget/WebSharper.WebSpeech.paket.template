@@ -14,6 +14,9 @@ tags
 files
     ../WebSharper.WebSpeech/bin/Release/netstandard2.0/WebSharper.WebSpeech.dll ==> lib/netstandard2.0
     ../WebSharper.WebSpeech/bin/Release/netstandard2.0/WebSharper.WebSpeech.xml ==> lib/netstandard2.0
+    ../WebSharper.WebSpeech.Extensions/bin/Release/netstandard2.0/WebSharper.WebSpeech.Extensions.dll ==> lib/netstandard2.0
+    ../WebSharper.WebSpeech.Extensions/bin/Release/netstandard2.0/WebSharper.WebSpeech.Extensions.xml ==> lib/netstandard2.0
+    ../WebSharper.WebSpeech/WebSharper.WebSpeech.fsproj ==> src/
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
 

@@ -4,9 +4,9 @@
 //
 // Copyright (c) 2008-2018 IntelliFactory
 //
-// Licensed under the Apache License, Version 2.0 (the "License"); you
-// may not use this file except in compliance with the License.  You may
-// obtain a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.  You
+// may obtain a copy of the License at
 //
 //     http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -21,20 +21,20 @@ namespace WebSharper.WebSpeech
 
 open WebSharper.InterfaceGenerator
 
-// As of Date: 7 July 2025
+// Updated to the Web Speech API spec as of 2025.
 module Definition =
     open WebSharper.JavaScript.Dom
 
     let O = T<unit>
-    let Ulong =  T<int>
+    let Ulong = T<int>
     let Event = T<Event>
 
     let SpeechGrammarList = Class "SpeechGrammarList"
     let SpeechGrammar = Class "SpeechGrammar"
     let SpeechRecognitionEvent = Class "SpeechRecognitionEvent"
-    let SpeechRecognitionErrorEvent = Class "SpeechRecognitionError"
+    let SpeechRecognitionErrorEvent = Class "SpeechRecognitionErrorEvent"
 
-    //Not in the spec but may be useful
+    // Not in the spec but may be useful.
     let ArrayLike =
         Generic - fun t1 ->
             Class "ArrayLike"
@@ -43,12 +43,23 @@ module Definition =
                 "item" => Ulong?index ^-> t1
             ]
 
+    /// A single phrase used to bias recognition (added to the spec in 2024).
+    let SpeechRecognitionPhrase =
+        Pattern.Config "SpeechRecognitionPhrase" {
+            Required = [
+                "phrase", T<string>
+            ]
+            Optional = [
+                "boost", T<float>
+            ]
+        }
+
     let SpeechRecognition =
         Class "SpeechRecognition"
         |=> Inherits T<EventTarget>
-        |+> Static [ 
-            Constructor O 
-            |> WithInline "new (window.SpeecRecognition || window.webkitSpeechRecognition)()"
+        |+> Static [
+            Constructor O
+            |> WithInline "new (window.SpeechRecognition || window.webkitSpeechRecognition)()"
         ]
         |+> Instance [
             "grammars" =@ SpeechGrammarList
@@ -56,19 +67,22 @@ module Definition =
             "lang" =@ T<string>
             |> WithComment "This attribute will set the language of the recognition for the request, using a valid BCP 47 language tag."
             "continuous" =@ T<bool>
-            |> WithComment "Indicates whether the object is one-shot only or does continously recotd and recognize speech."
+            |> WithComment "Indicates whether the object is one-shot only or does continuously record and recognize speech."
             "interimResults" =@ T<bool>
             |> WithComment "Controls whether interim results are returned."
             "maxAlternatives" =@ Ulong
             |> WithComment "Sets the maximum number of SpeechRecognitionAlternatives per result."
             "serviceURI" =@ T<string>
             |> WithComment "The serviceURI attribute specifies the location of the speech recognition service that the web application wishes to use."
+            "processLocally" =@ T<bool>
+            |> WithComment "Requests that recognition be performed locally on the user's device rather than in the cloud."
+            "phrases" =@ !| SpeechRecognitionPhrase
+            |> WithComment "The phrases property of the SpeechRecognition interface provides a list of phrase hints to improve recognition accuracy for specific words."
 
             "start" => O ^-> O
             |> WithComment "When the start method is called it represents the moment in time the web application wishes to begin recognition."
             "stop" => O ^-> O
-            |> WithComment "The stop method represents an instruction to the recognition service to stop listening to more audio, \
-                            and to try and return a result using just the audio that it has already received for this recognition."
+            |> WithComment "The stop method represents an instruction to the recognition service to stop listening to more audio, and to try and return a result using just the audio that it has already received for this recognition."
             "abort" => O ^-> O
             |> WithComment "The abort method is a request to immediately stop listening and stop recognizing and do not return any information but that the system is done."
 
@@ -81,7 +95,7 @@ module Definition =
             "onspeechend" =@ Event ^-> O
             |> WithComment "Fired when the speech that will be used for speech recognition has ended."
             "onsoundend" =@ Event ^-> O
-            |> WithComment "Fired when some sound is no longer detected. "
+            |> WithComment "Fired when some sound is no longer detected."
             "onaudioend" =@ Event ^-> O
             |> WithComment "Fired when the user agent has finished capturing audio."
             "onresult" =@ SpeechRecognitionEvent ^-> O
@@ -96,7 +110,7 @@ module Definition =
             |> WithComment "Fired when the service has disconnected."
         ]
 
-    let ErrorCode = 
+    let ErrorCode =
         Pattern.EnumStrings "ErrorCode" [
             "no-speech"
             "aborted"
@@ -110,7 +124,7 @@ module Definition =
 
     SpeechRecognitionErrorEvent
         |=> Inherits Event
-        |=> Nested [ErrorCode]
+        |=> Nested [ ErrorCode ]
         |+> Instance [
             "error" =? ErrorCode
             "message" =? T<string>
@@ -121,17 +135,17 @@ module Definition =
         Class "SpeechRecognitionAlternative"
         |+> Instance [
             "transcript" =? T<string>
-            |> WithComment "The transcript string represents the raw words that the user spoke." 
+            |> WithComment "The transcript string represents the raw words that the user spoke."
             "confidence" =? T<float>
             |> WithComment "The confidence represents a numeric estimate between 0 and 1 of how confident the recognition system is that the recognition is correct."
         ]
 
-    let SpeechRecognitionResult = 
+    let SpeechRecognitionResult =
         Class "SpeechRecognitionResult"
         |=> Inherits (ArrayLike.[SpeechRecognitionAlternative])
         |+> Instance [
-            //Should be "final" but Chrome has "isFinal"
             "isFinal" =? T<bool>
+            |> WithComment "True if this result is final (has been finalized) and no longer changes."
         ]
 
     let SpeechRecognitionResultList =
@@ -144,14 +158,13 @@ module Definition =
             "resultIndex" =? Ulong
             |> WithComment "The lowest index in the results array that has changed."
             "results" =? SpeechRecognitionResultList
-            |> WithComment "The array of all current recognition results for this session. \
-                            Specifically all final results that have been returned, followed by the current best hypothesis for all interim results."
+            |> WithComment "The array of all current recognition results for this session. Specifically all final results that have been returned, followed by the current best hypothesis for all interim results."
             "interpretation" =? T<obj>
             |> WithComment "The interpretation represents the semantic meaning from what the user said."
-            |> ObsoleteWithMessage "Deprecated: This feature is no longer recommended. Though some browsers might still support it, it may have already been removed from the relevant web standards, may be in the process of being dropped, or may only be kept for compatibility purposes. Avoid using it, and update existing code if possible; see the compatibility table at the bottom of this page to guide your decision. Be aware that this feature may cease to work at any time."
+            |> ObsoleteWithMessage "Deprecated: this feature is no longer recommended and may be removed from the relevant web standards."
             "emma" =? T<Document>
             |> WithComment "EMMA 1.0 representation of this result."
-            |> ObsoleteWithMessage "Deprecated: This feature is no longer recommended. Though some browsers might still support it, it may have already been removed from the relevant web standards, may be in the process of being dropped, or may only be kept for compatibility purposes. Avoid using it, and update existing code if possible; see the compatibility table at the bottom of this page to guide your decision. Be aware that this feature may cease to work at any time."
+            |> ObsoleteWithMessage "Deprecated: this feature is no longer recommended and may be removed from the relevant web standards."
         ]
         |> ignore
 
@@ -163,7 +176,7 @@ module Definition =
             "weight" =? T<float>
             |> WithComment "The optional weight attribute controls the weight that the speech recognition service should use with this grammar."
         ]
-        |> ObsoleteWithMessage "Deprecated: This feature is no longer recommended. Though some browsers might still support it, it may have already been removed from the relevant web standards, may be in the process of being dropped, or may only be kept for compatibility purposes. Avoid using it, and update existing code if possible; see the compatibility table at the bottom of this page to guide your decision. Be aware that this feature may cease to work at any time."
+        |> ObsoleteWithMessage "Deprecated: this feature is no longer recommended and may be removed from the relevant web standards."
         |> ignore
 
     SpeechGrammarList
@@ -171,12 +184,10 @@ module Definition =
         |+> Static [ Constructor O ]
         |+> Instance [
             "addFromURI" => (T<string>?src * !? T<float>?weight) ^-> O
-            "addFromString" => (T<string>?string * !? T<float>?wight) ^-> O
+            "addFromString" => (T<string>?string * !? T<float>?weight) ^-> O
         ]
-        |> WithComment "Experimental: This is an experimental technology
-        Check the Browser compatibility table carefully before using this in production."
+        |> WithComment "Experimental: check the browser compatibility table carefully before using this in production."
         |> ignore
-        
 
     let SpeechSynthesisUtterance = Class "SpeechSynthesisUtterance"
     let SpeechSynthesisVoice = Class "SpeechSynthesisVoice"
@@ -204,14 +215,8 @@ module Definition =
             "getVoices" => O ^-> !| SpeechSynthesisVoice
             |> WithComment "This method returns the available voices."
 
-            "onvoiceschanged" => Event ^-> O
-            |> WithComment "Fired when the list of SpeechSynthesisVoice objects that would be returned by the SpeechSynthesis.getVoices() method has changed (when the voiceschanged event fires.)"
-        ]
-
-    let SpeechSynthesisGetter =
-        Class "window"
-        |+> Static [
-            "speechSynthesis" =? SpeechSynthesis
+            "onvoiceschanged" =@ Event ^-> O
+            |> WithComment "Fired when the list of SpeechSynthesisVoice objects that would be returned by the SpeechSynthesis.getVoices() method has changed."
         ]
 
     let SpeechSynthesisEventInit =
@@ -235,24 +240,39 @@ module Definition =
         ]
         |+> Instance [
             "charIndex" =? Ulong
-            |> WithComment "This attribute indicates the zero-based character index into the original utterance string \
-                            that most closely approximates the current speaking position of the speech engine."
+            |> WithComment "This attribute indicates the zero-based character index into the original utterance string that most closely approximates the current speaking position of the speech engine."
             "elapsedTime" =? T<float>
-            |> WithComment "This attribute indicates the time, in seconds, that this event triggered, relative to when this utterance has begun to be spoken. "
+            |> WithComment "This attribute indicates the time, in seconds, that this event triggered, relative to when this utterance has begun to be spoken."
             "name" =? T<string>
             |> WithComment "For mark events, this attribute indicates the name of the marker, as defined in SSML as the name attribute of a mark element."
             "charLength" =? T<int>
-            |> WithComment "returns the number of characters left to be spoken after the character at the charIndex position."
+            |> WithComment "Returns the number of characters left to be spoken after the character at the charIndex position."
             "utterance" =? SpeechSynthesisUtterance
-            |> WithComment "returns the SpeechSynthesisUtterance instance that the event was triggered on."
+            |> WithComment "Returns the SpeechSynthesisUtterance instance that the event was triggered on."
+        ]
+
+    let SpeechSynthesisErrorCode =
+        Pattern.EnumStrings "SpeechSynthesisErrorCode" [
+            "canceled"
+            "interrupted"
+            "audio-busy"
+            "audio-hardware"
+            "network"
+            "synthesis-unavailable"
+            "synthesis-failed"
+            "language-unavailable"
+            "voice-unavailable"
+            "text-too-long"
+            "invalid-argument"
+            "not-allowed"
         ]
 
     let SpeechSynthesisErrorEvent =
         Class "SpeechSynthesisErrorEvent"
         |=> Inherits SpeechSynthesisEvent
-        |+> Static [Constructor T<unit>]
         |+> Instance [
-            "error" =@ T<string>
+            "error" =? SpeechSynthesisErrorCode
+            |> WithComment "The error code describing why the utterance failed."
         ]
 
     SpeechSynthesisUtterance
@@ -279,7 +299,7 @@ module Definition =
             "onend" =@ SpeechSynthesisEvent ^-> O
             |> WithComment "Fired when this utterance has completed being spoken."
             "onerror" =@ SpeechSynthesisErrorEvent ^-> O
-            |> WithComment "Fired if there was an error that prevented successful speaking of this utterance."
+            |> WithComment "Fired if there was an error that prevented successful speaking of the utterance."
             "onpause" =@ SpeechSynthesisEvent ^-> O
             |> WithComment "Fired when and if this utterance is paused mid-utterance."
             "onresume" =@ SpeechSynthesisEvent ^-> O
@@ -300,10 +320,9 @@ module Definition =
             "lang" =? T<string>
             |> WithComment "This attribute is a BCP 47 language tag indicating the language of the voice."
             "localService" =? T<bool>
-            |> WithComment "This attribute is true for voices supplied by a local speech synthesizer, and is false for voices supplied by a remote speech synthesizer service."
+            |> WithComment "This attribute is true for voices supplied by a local speech synthesizer, and is false for voices supplied by a remote speech synthesis service."
             "default" =? T<bool>
             |> WithComment "Indicates whether the voice is the default voice of the given language."
-
         ]
         |> ignore
 
@@ -313,6 +332,7 @@ module Definition =
                 ArrayLike
 
                 SpeechRecognition
+                SpeechRecognitionPhrase
                 SpeechRecognitionErrorEvent
                 SpeechRecognitionAlternative
                 SpeechRecognitionResult
@@ -321,11 +341,11 @@ module Definition =
                 SpeechGrammar
                 SpeechGrammarList
                 SpeechSynthesis
-                SpeechSynthesisGetter
                 SpeechSynthesisEvent
                 SpeechSynthesisUtterance
                 SpeechSynthesisVoice
                 SpeechSynthesisErrorEvent
+                SpeechSynthesisErrorCode
                 SpeechSynthesisEventInit
             ]
         ]
